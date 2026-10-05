@@ -1,3 +1,5 @@
+from models import Student
+
 # ── Constants ────────────────────────────────────────────────────────────────
 
 EXAM_WEIGHT: float = 0.70
@@ -147,11 +149,11 @@ def calculate_status(marks: float, attendance: float) -> str:
 
 # ── Report ───────────────────────────────────────────────────────────────────
 
-def student_report(student_data: dict[str, list]) -> None:
+def student_report(students: list[Student]) -> None:
     """Print a formatted console report including summary statistics,
     per-student grades and status, and top performers.
     """
-    no_of_students = len(student_data["names"])
+    no_of_students = len(students)
 
     print("-" * 60)
     print("STUDENT REPORT")
@@ -161,9 +163,9 @@ def student_report(student_data: dict[str, list]) -> None:
     print("-" * 20 + "Summary Statistics" + "-" * 20)
 
     print("Total enrolled students: ", no_of_students)
-    print("Average exam marks: ", calculate_average(student_data["marks"]))
-    print("Average assignment: ", calculate_average(student_data["assignment_score"]))
-    print("Average attendance: ", calculate_average(student_data["attendance"]))
+    print("Average exam marks: ", calculate_average([s.marks for s in students]))
+    print("Average assignment: ", calculate_average([s.assignment_score for s in students]))
+    print("Average attendance: ", calculate_average([s.attendance for s in students]))
 
     # ── Student Status & Grades ──────────────────────────────────
     print("-" * 20 + "Student Status & Grades" + "-" * 20)
@@ -173,19 +175,14 @@ def student_report(student_data: dict[str, list]) -> None:
     )
     print("-" * 75)
 
-    for student_index in range(no_of_students):
-        name = student_data["names"][student_index]
-        marks = student_data["marks"][student_index]
-        attendance = student_data["attendance"][student_index]
-        assignment_score = student_data["assignment_score"][student_index]
-
+    for student in students:
         print(
-            f"{name:<12} | "
-            f"{marks:<8} | "
-            f"{attendance:<10} | "
-            f"{assignment_score:<8} | "
-            f"{calculate_grade(marks, assignment_score):<8} | "
-            f"{calculate_status(marks, attendance):<10}"
+            f"{student.name:<12} | "
+            f"{student.marks:<8} | "
+            f"{student.attendance:<10} | "
+            f"{student.assignment_score:<8} | "
+            f"{calculate_grade(student.marks, student.assignment_score):<8} | "
+            f"{calculate_status(student.marks, student.attendance):<10}"
         )
 
     # ── Top Performers ───────────────────────────────────────────
@@ -194,32 +191,26 @@ def student_report(student_data: dict[str, list]) -> None:
     top_score = -1.0
     top_students: list[str] = []
 
-    for student_index in range(no_of_students):
-        marks = student_data["marks"][student_index]
-        assignment_score = student_data["assignment_score"][student_index]
-        composite_score = calculate_composite_score(marks, assignment_score)
+    for student in students:
+        composite_score = calculate_composite_score(
+            student.marks, student.assignment_score
+        )
 
         if composite_score > top_score:
             top_score = composite_score
-            top_students = [student_data["names"][student_index]]
+            top_students = [student.name]
         elif composite_score == top_score:
-            top_students.append(student_data["names"][student_index])
+            top_students.append(student.name)
 
-    for student in top_students:
-        print(student)
+    for name in top_students:
+        print(name)
 
 
 # ── Entry Point ──────────────────────────────────────────────────────────────
 
 def student_details() -> None:
-    """Collect student details interactively with input validation, then display the performance report.
-    """
-    student_data: dict[str, list] = {
-        "names": [],
-        "marks": [],
-        "attendance": [],
-        "assignment_score": [],
-    }
+    """Collect student details interactively with input validation, then display the performance report."""
+    students: list[Student] = []
 
     print("-" * 60)
     print("ENTER STUDENT DETAILS")
@@ -238,12 +229,14 @@ def student_details() -> None:
         attendance = get_valid_float("Enter the student attendance: ", MIN_SCORE, MAX_SCORE)
         assignment_score = get_valid_float("Enter the student assignment score: ", MIN_SCORE, MAX_SCORE)
 
-        student_data["names"].append(name)
-        student_data["marks"].append(marks)
-        student_data["attendance"].append(attendance)
-        student_data["assignment_score"].append(assignment_score)
+        students.append(Student(
+            name=name,
+            marks=marks,
+            attendance=attendance,
+            assignment_score=assignment_score,
+        ))
 
-    student_report(student_data)
+    student_report(students)
 
 
 if __name__ == "__main__":
