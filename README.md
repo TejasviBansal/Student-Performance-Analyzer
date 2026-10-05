@@ -7,6 +7,7 @@
 - Input/data validation
 - Student performance reporting
 - Advanced student analytics (Pandas-based)
+- SQLite database persistence
 
 ## Project Structure
 - `models.py` → data models (Student dataclass)
@@ -15,6 +16,7 @@
 - `analyzer.py` → analytical logic
 - `analytics.py` → advanced pandas analytics functions
 - `visualizations.py` → matplotlib/seaborn charting functions
+- `database.py` → SQLite persistence (CRUD operations)
 - `reports.py` → console reporting
 - `data_loader.py` → CSV loading and pandas processing
 - `main.py` → application entry point
@@ -62,3 +64,17 @@ Available visualizations:
 - Performance categories
 - Marks vs attendance
 - Marks vs assignment score
+
+## SQLite Database
+
+The application uses SQLite for persistent student data storage.
+
+The database stores:
+- student name
+- marks
+- attendance
+- assignment score
+
+Derived metrics such as grade, status, composite score, and performance categories are calculated by the application rather than stored in the database.
+
+The database file `data/students.db` is generated locally and ignored by Git.

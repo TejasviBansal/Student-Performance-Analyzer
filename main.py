@@ -10,6 +10,7 @@ from validators import (
     MIN_SCORE,
     MIN_STUDENTS,
 )
+import database
 
 
 def collect_manual_students() -> list[Student]:
@@ -72,15 +73,63 @@ def collect_csv_students() -> list[Student]:
         return []
 
 
+def collect_database_students() -> list[Student]:
+    """Retrieve students from the SQLite database."""
+    print("-" * 60)
+    print("LOAD DATABASE DATA")
+    print("-" * 60)
+
+    students = database.get_all_students()
+
+    if not students:
+        print("No students found in the database.")
+
+    return students
+
+
+def import_csv_to_database() -> None:
+    """Load students from CSV and insert them into the database."""
+    print("-" * 60)
+    print("IMPORT CSV INTO DATABASE")
+    print("-" * 60)
+
+    file_path = input(
+        "Enter CSV file path\nPress Enter to use the default:\ndata/student_data.csv\n> "
+    ).strip()
+
+    if not file_path:
+        file_path = "data/student_data.csv"
+
+    try:
+        students = load_students_from_csv(file_path)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        return
+    except ValueError as e:
+        print(f"Error: {e}")
+        return
+
+    if not students:
+        print("No valid students found in the CSV file.")
+        return
+
+    database.add_students(students)
+    print(f"Successfully imported {len(students)} students into the database.")
+
+
 def main() -> None:
     """Main application loop."""
+    database.initialize_database()
+
     while True:
         print("-" * 40)
         print("STUDENT PERFORMANCE ANALYZER")
         print("-" * 40)
         print("1. Enter student details manually")
         print("2. Load student data from CSV")
-        print("3. Exit")
+        print("3. Load student data from Database")
+        print("4. Import CSV into Database")
+        print("5. Exit")
         
         choice = input("\nEnter your choice: ").strip()
         
@@ -93,10 +142,16 @@ def main() -> None:
             if students:
                 student_report(students)
         elif choice == "3":
+            students = collect_database_students()
+            if students:
+                student_report(students)
+        elif choice == "4":
+            import_csv_to_database()
+        elif choice == "5":
             print("Exiting...")
             return
         else:
-            print("Invalid choice. Please select 1, 2, or 3.")
+            print("Invalid choice. Please select 1, 2, 3, 4, or 5.")
 
 
 if __name__ == "__main__":
