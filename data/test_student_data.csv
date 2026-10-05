@@ -1,0 +1,9 @@
+name,marks,attendance,assignment_score
+Aarav,85,90,88
+Priya,72,82,75
+Invalid Marks,abc,90,80
+Too High Marks,120,90,80
+Low Attendance,75,-10,80
+Blank Name,,80,75
+Missing Assignment,80,90,
+Valid Student,92,95,91
