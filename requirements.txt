@@ -3,3 +3,4 @@ matplotlib
 seaborn
 fastapi
 uvicorn
+pytest

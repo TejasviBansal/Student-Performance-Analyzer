@@ -97,3 +97,16 @@ Endpoint Groups:
 - **Health Check**: Verify API is running (`/health`)
 - **Student Management**: Create, read, and delete student records (`/students`)
 - **Analytics**: Access all derived performance metrics and insights (`/analytics/...`)
+
+## Testing
+
+Run the automated test suite:
+
+```bash
+pytest
+```
+
+Optionally, for more detail:
+```bash
+pytest -v
+```
