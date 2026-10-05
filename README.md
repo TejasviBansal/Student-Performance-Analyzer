@@ -14,6 +14,7 @@
 - `calculations.py` → calculation/business rules
 - `analyzer.py` → analytical logic
 - `analytics.py` → advanced pandas analytics functions
+- `visualizations.py` → matplotlib/seaborn charting functions
 - `reports.py` → console reporting
 - `data_loader.py` → CSV loading and pandas processing
 - `main.py` → application entry point
@@ -50,3 +51,14 @@ The application computes advanced analytics on the student data using Pandas:
 - High performers identification
 - Metric correlation analysis
 - Automated deterministic analytical insights
+
+## Data Visualization
+
+The project uses Matplotlib and Seaborn to visualize student performance. Generated charts are saved to the `output/` directory, which is ignored by Git.
+
+Available visualizations:
+- Grade distribution
+- Score distribution
+- Performance categories
+- Marks vs attendance
+- Marks vs assignment score

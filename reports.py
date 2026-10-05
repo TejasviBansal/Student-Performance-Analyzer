@@ -6,6 +6,7 @@ from calculations import (
 )
 from analyzer import find_top_performers
 import analytics
+from visualizations import generate_all_visualizations
 
 def student_report(students: list[Student]) -> None:
     """Print a formatted console report including summary statistics,
@@ -136,3 +137,11 @@ def student_report(students: list[Student]) -> None:
                 print(f"- {insight}")
         else:
             print("- No insights available")
+
+        # ── Visualizations ───────────────────────────────────────────
+        print("\n" + "-" * 40)
+        print("Visualizations")
+        print("-" * 40)
+        
+        generate_all_visualizations(students)
+        print("Charts generated successfully in: output/")
