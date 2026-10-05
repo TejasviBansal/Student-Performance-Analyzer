@@ -10,6 +10,7 @@
 - SQLite database persistence
 
 ## Project Structure
+- `api.py` → FastAPI REST API
 - `models.py` → data models (Student dataclass)
 - `validators.py` → input validation
 - `calculations.py` → calculation/business rules
@@ -78,3 +79,21 @@ The database stores:
 Derived metrics such as grade, status, composite score, and performance categories are calculated by the application rather than stored in the database.
 
 The database file `data/students.db` is generated locally and ignored by Git.
+
+## REST API
+
+The project includes a FastAPI REST API for accessing student data and performance analytics.
+
+Run the API:
+```bash
+uvicorn api:app --reload
+```
+
+API documentation:
+- Swagger UI: http://127.0.0.1:8000/docs
+- ReDoc: http://127.0.0.1:8000/redoc
+
+Endpoint Groups:
+- **Health Check**: Verify API is running (`/health`)
+- **Student Management**: Create, read, and delete student records (`/students`)
+- **Analytics**: Access all derived performance metrics and insights (`/analytics/...`)

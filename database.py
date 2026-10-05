@@ -32,12 +32,7 @@ def add_student(student: Student) -> None:
             INSERT INTO students (name, marks, attendance, assignment_score)
             VALUES (?, ?, ?, ?)
             """,
-            (
-                student.name,
-                student.marks,
-                student.attendance,
-                student.assignment_score,
-            ),
+            (student.name, student.marks, student.attendance, student.assignment_score),
         )
 
 
@@ -53,13 +48,8 @@ def add_students(students: list[Student]) -> None:
             VALUES (?, ?, ?, ?)
             """,
             [
-                (
-                    student.name,
-                    student.marks,
-                    student.attendance,
-                    student.assignment_score,
-                )
-                for student in students
+                (s.name, s.marks, s.attendance, s.assignment_score)
+                for s in students
             ],
         )
 
@@ -86,6 +76,29 @@ def get_all_students() -> list[Student]:
     ]
 
 
+def get_all_student_records() -> list[dict[str, int | float | str]]:
+    """Retrieve all student records from the database including their IDs."""
+    with sqlite3.connect(DATABASE_PATH) as connection:
+        rows = connection.execute(
+            """
+            SELECT id, name, marks, attendance, assignment_score
+            FROM students
+            ORDER BY id
+            """
+        ).fetchall()
+
+    return [
+        {
+            "id": row[0],
+            "name": row[1],
+            "marks": float(row[2]),
+            "attendance": float(row[3]),
+            "assignment_score": float(row[4]),
+        }
+        for row in rows
+    ]
+
+
 def delete_all_students() -> None:
     """Delete all student records from the database."""
     with sqlite3.connect(DATABASE_PATH) as connection:
@@ -95,6 +108,4 @@ def delete_all_students() -> None:
 def count_students() -> int:
     """Return the number of students in the database."""
     with sqlite3.connect(DATABASE_PATH) as connection:
-        result = connection.execute("SELECT COUNT(*) FROM students").fetchone()
-
-    return result[0]
+        return connection.execute("SELECT COUNT(*) FROM students").fetchone()[0]
