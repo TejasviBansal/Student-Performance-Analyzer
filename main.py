@@ -11,8 +11,82 @@ GRADE_D_THRESHOLD: float = 40
 PASS_MARKS_THRESHOLD: float = 40
 MIN_ATTENDANCE_THRESHOLD: float = 75
 
+MIN_SCORE: float = 0
+MAX_SCORE: float = 100
 
-# ── Helper Functions ─────────────────────────────────────────────────────────
+MIN_STUDENTS: int = 1
+MAX_STUDENTS: int = 100
+
+
+# ── Input Validation Helpers ─────────────────────────────────────────────────
+
+def get_valid_integer(prompt: str, minimum: int, maximum: int) -> int:
+    """Prompt the user until a valid integer within [minimum, maximum] is entered.
+
+    Handles non-integer input gracefully and displays a clear error message before re-prompting.
+    """
+    while True:
+        raw = input(prompt).strip()
+        try:
+            value = int(raw)
+        except ValueError:
+            print(
+                f"Invalid input. Please enter a whole number "
+                f"between {minimum} and {maximum}."
+            )
+            continue
+
+        if value < minimum or value > maximum:
+            print(
+                f"Invalid input. Please enter a value "
+                f"between {minimum} and {maximum}."
+            )
+            continue
+
+        return value
+
+
+def get_valid_float(prompt: str, minimum: float, maximum: float) -> float:
+    """Prompt the user until a valid numeric value within [minimum, maximum] is entered.
+
+    Accepts both integer and decimal input. Handles non-numeric input
+    gracefully and displays a clear error message before re-prompting.
+    """
+    while True:
+        raw = input(prompt).strip()
+        try:
+            value = float(raw)
+        except ValueError:
+            print(
+                f"Invalid input. Please enter a numeric value "
+                f"between {int(minimum)} and {int(maximum)}."
+            )
+            continue
+
+        if value < minimum or value > maximum:
+            print(
+                f"Invalid input. Please enter a value "
+                f"between {int(minimum)} and {int(maximum)}."
+            )
+            continue
+
+        return value
+
+
+def get_valid_name(prompt: str) -> str:
+    """Prompt the user until a non-empty name is entered.
+
+    Leading and trailing whitespace is stripped before validation.
+    """
+    while True:
+        name = input(prompt).strip()
+        if not name:
+            print("Student name cannot be empty. Please enter a valid name.")
+            continue
+        return name
+
+
+# ── Calculation Helpers ──────────────────────────────────────────────────────
 
 def calculate_average(values: list[float]) -> float:
     """Calculate the arithmetic average of a list of numeric values.
@@ -138,7 +212,8 @@ def student_report(student_data: dict[str, list]) -> None:
 # ── Entry Point ──────────────────────────────────────────────────────────────
 
 def student_details() -> None:
-    """Collect student details interactively and display the performance report."""
+    """Collect student details interactively with input validation, then display the performance report.
+    """
     student_data: dict[str, list] = {
         "names": [],
         "marks": [],
@@ -150,13 +225,23 @@ def student_details() -> None:
     print("ENTER STUDENT DETAILS")
     print("-" * 60)
 
-    no_of_students = int(input("Enter number of students: "))
+    no_of_students = get_valid_integer(
+        "Enter number of students: ", MIN_STUDENTS, MAX_STUDENTS
+    )
 
     for student_index in range(no_of_students):
-        student_data["names"].append(input("Enter the student name: ").strip())
-        student_data["marks"].append(float(input("Enter the student marks: ")))
-        student_data["attendance"].append(float(input("Enter the student attendance: ")))
-        student_data["assignment_score"].append(float(input("Enter the student assignment score: ")))
+        print(f"\nEnter details for student {student_index + 1}")
+        print("---------------------------")
+
+        name = get_valid_name("Enter the student name: ")
+        marks = get_valid_float("Enter the student marks: ", MIN_SCORE, MAX_SCORE)
+        attendance = get_valid_float("Enter the student attendance: ", MIN_SCORE, MAX_SCORE)
+        assignment_score = get_valid_float("Enter the student assignment score: ", MIN_SCORE, MAX_SCORE)
+
+        student_data["names"].append(name)
+        student_data["marks"].append(marks)
+        student_data["attendance"].append(attendance)
+        student_data["assignment_score"].append(assignment_score)
 
     student_report(student_data)
 
