@@ -1,5 +1,7 @@
 # Student Performance Analyzer
 
+![CI](https://github.com/TejasviBansal/Student-Performance-Analyzer/actions/workflows/ci.yml/badge.svg)
+
 ## Features
 - Manual student data entry
 - CSV data import
@@ -146,6 +148,17 @@ CLI (main.py)
 
 The Streamlit dashboard does not access the database or analytics layer directly.
 All data operations go through the FastAPI REST API.
+
+## Continuous Integration
+
+This project uses GitHub Actions to automatically run the test suite on every push and pull request.
+
+The CI workflow:
+1. Sets up Python 3.13
+2. Installs project dependencies from `requirements.txt`
+3. Runs the complete Pytest test suite
+
+Workflow file: `.github/workflows/ci.yml`
 
 ## Testing
 
