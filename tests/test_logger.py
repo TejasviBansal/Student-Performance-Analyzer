@@ -27,6 +27,6 @@ def test_log_message_can_be_written():
     
     # Read the log file and verify the message is present
     log_file = Path("logs/app.log")
-    content = log_file.read_text(encoding="utf-8")
+    content = log_file.read_text(encoding="utf-8", errors="ignore")
     
     assert test_message in content

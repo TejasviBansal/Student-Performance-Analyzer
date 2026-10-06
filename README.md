@@ -105,14 +105,47 @@ Endpoint Groups:
 
 ## Streamlit Dashboard
 
-The project includes a Streamlit dashboard that provides interactive student performance analysis. It displays analytics and visualizations, and supports adding students and CSV imports directly through a web interface.
+The project includes a Streamlit dashboard that communicates with the FastAPI backend through HTTP APIs.
+
+*Note: Both the FastAPI server and the Streamlit dashboard must be running at the same time.*
 
 Run the dashboard:
 ```bash
 streamlit run streamlit_app.py
 ```
 
-*Note: The dashboard currently accesses the existing Python modules directly. API integration is planned for a later phase.*
+## Application Architecture
+
+The project contains three entry points that share the same SQLite database and core modules:
+
+| Interface | Command |
+|---|---|
+| CLI | `python main.py` |
+| FastAPI backend | `uvicorn api:app --reload` |
+| Streamlit dashboard | `streamlit run streamlit_app.py` |
+
+```
+Streamlit (streamlit_app.py)
+    │
+    │  HTTP
+    ▼
+api_client.py
+    │
+    │  HTTP
+    ▼
+FastAPI (api.py)
+    │
+    ├── database.py → SQLite
+    ├── analytics.py
+    └── visualizations.py
+
+CLI (main.py)
+    │
+    └── Core modules → SQLite
+```
+
+The Streamlit dashboard does not access the database or analytics layer directly.
+All data operations go through the FastAPI REST API.
 
 ## Testing
 
