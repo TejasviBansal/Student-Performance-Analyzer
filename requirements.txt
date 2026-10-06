@@ -4,3 +4,4 @@ seaborn
 fastapi
 uvicorn
 pytest
+streamlit

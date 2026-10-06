@@ -103,6 +103,17 @@ Endpoint Groups:
 - **Student Management**: Create, read, and delete student records (`/students`)
 - **Analytics**: Access all derived performance metrics and insights (`/analytics/...`)
 
+## Streamlit Dashboard
+
+The project includes a Streamlit dashboard that provides interactive student performance analysis. It displays analytics and visualizations, and supports adding students and CSV imports directly through a web interface.
+
+Run the dashboard:
+```bash
+streamlit run streamlit_app.py
+```
+
+*Note: The dashboard currently accesses the existing Python modules directly. API integration is planned for a later phase.*
+
 ## Testing
 
 Run the automated test suite:
