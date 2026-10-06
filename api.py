@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 import database
 import analytics
 from models import Student
+from logger import app_logger
 
 
 @asynccontextmanager
@@ -46,6 +47,7 @@ def get_students_or_404() -> list[Student]:
 
 @app.get("/health")
 def health_check():
+    app_logger.debug("Health check requested")
     return {"status": "ok"}
 
 
@@ -61,6 +63,7 @@ def get_student_count():
 
 @app.post("/students")
 def create_student(student_in: StudentCreate):
+    app_logger.info("API request: create student")
     student = Student(
         name=student_in.name,
         marks=student_in.marks,
@@ -73,6 +76,7 @@ def create_student(student_in: StudentCreate):
 
 @app.post("/students/bulk")
 def bulk_create_students(students_in: list[StudentCreate]):
+    app_logger.info("API request: bulk create students")
     students = [
         Student(
             name=s.name,
@@ -91,12 +95,14 @@ def bulk_create_students(students_in: list[StudentCreate]):
 
 @app.delete("/students")
 def delete_all_students():
+    app_logger.info("API request: delete all students")
     database.delete_all_students()
     return {"message": "All students deleted successfully"}
 
 
 @app.get("/analytics/performance")
 def get_performance_summary():
+    app_logger.info("API request: performance analytics")
     students = get_students_or_404()
     return analytics.calculate_performance_summary(students)
 

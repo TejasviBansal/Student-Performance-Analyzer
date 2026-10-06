@@ -4,3 +4,4 @@ __pycache__/
 output/
 data/students.db
 .pytest_cache/
+logs/

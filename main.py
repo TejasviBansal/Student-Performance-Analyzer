@@ -11,6 +11,7 @@ from validators import (
     MIN_STUDENTS,
 )
 import database
+from logger import app_logger
 
 
 def collect_manual_students() -> list[Student]:
@@ -119,6 +120,7 @@ def import_csv_to_database() -> None:
 
 def main() -> None:
     """Main application loop."""
+    app_logger.info("Student Performance Analyzer started")
     database.initialize_database()
 
     while True:
@@ -134,20 +136,25 @@ def main() -> None:
         choice = input("\nEnter your choice: ").strip()
         
         if choice == "1":
+            app_logger.info("User selected manual input")
             students = collect_manual_students()
             if students:
                 student_report(students)
         elif choice == "2":
+            app_logger.info("User selected CSV input")
             students = collect_csv_students()
             if students:
                 student_report(students)
         elif choice == "3":
+            app_logger.info("User selected database input")
             students = collect_database_students()
             if students:
                 student_report(students)
         elif choice == "4":
+            app_logger.info("User selected CSV import")
             import_csv_to_database()
         elif choice == "5":
+            app_logger.info("Student Performance Analyzer exited")
             print("Exiting...")
             return
         else:

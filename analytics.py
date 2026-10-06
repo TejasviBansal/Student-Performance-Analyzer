@@ -1,4 +1,5 @@
 import pandas as pd
+from logger import app_logger
 from models import Student
 from calculations import (
     GRADE_A_THRESHOLD,
@@ -17,7 +18,10 @@ def _students_to_dataframe(students: list[Student]) -> pd.DataFrame:
     Calculates derived analytical columns without modifying the original Student objects.
     """
     if not students:
+        app_logger.warning("No students available for analytics")
         raise ValueError("At least one student is required for analytics.")
+
+    app_logger.info("Calculating student performance analytics")
 
     data = []
     for s in students:
@@ -141,6 +145,7 @@ def calculate_correlations(students: list[Student]) -> dict[str, float]:
     Note: An undefined correlation caused by zero variance is represented as 0.0 in this project's analytics output.
     """
     if len(students) < 2:
+        app_logger.warning("Insufficient students to calculate correlations")
         raise ValueError("At least two students are required for correlation analysis.")
         
     df = _students_to_dataframe(students)

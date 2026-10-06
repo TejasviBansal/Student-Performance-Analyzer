@@ -1,5 +1,6 @@
 from pathlib import Path
 import pandas as pd
+from logger import app_logger
 from models import Student
 
 REQUIRED_COLUMNS: set[str] = {
@@ -17,7 +18,9 @@ def load_students_from_csv(file_path: str) -> list[Student]:
     Returns a list of clean Student objects.
     """
     path = Path(file_path)
+    app_logger.info("Loading student data from %s", file_path)
     if not path.exists():
+        app_logger.error("CSV file not found: %s", file_path)
         raise FileNotFoundError(f"Student data file not found: {file_path}")
     
     try:
@@ -56,8 +59,14 @@ def load_students_from_csv(file_path: str) -> list[Student]:
     print(f"Valid rows: {valid_count}.")
     print(f"Skipped invalid rows: {invalid_count}.")
 
+    if invalid_count > 0:
+        app_logger.warning("Skipped %d invalid student row(s)", invalid_count)
+
     if valid_count == 0:
+        app_logger.error("No valid student records found in the CSV file.")
         raise ValueError("No valid student records found in the CSV file.")
+
+    app_logger.info("Loaded %d valid students from CSV", valid_count)
 
     clean_df = dataframe.loc[valid_rows].copy()
 

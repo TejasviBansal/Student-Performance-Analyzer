@@ -1,4 +1,5 @@
 from pathlib import Path
+from logger import app_logger
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -103,8 +104,14 @@ def generate_all_visualizations(students: list[Student]) -> None:
     if not students:
         return
 
-    plot_grade_distribution(students)
-    plot_score_distribution(students)
-    plot_performance_categories(students)
-    plot_marks_vs_attendance(students)
-    plot_marks_vs_assignment(students)
+    app_logger.info("Generating student performance visualizations")
+    try:
+        plot_grade_distribution(students)
+        plot_score_distribution(students)
+        plot_performance_categories(students)
+        plot_marks_vs_attendance(students)
+        plot_marks_vs_assignment(students)
+        app_logger.info("Visualizations generated successfully")
+    except Exception:
+        app_logger.exception("Failed to generate visualizations")
+        raise

@@ -11,6 +11,7 @@
 
 ## Project Structure
 - `api.py` → FastAPI REST API
+- `logger.py` → Application logging configuration
 - `models.py` → data models (Student dataclass)
 - `validators.py` → input validation
 - `calculations.py` → calculation/business rules
@@ -21,6 +22,10 @@
 - `reports.py` → console reporting
 - `data_loader.py` → CSV loading and pandas processing
 - `main.py` → application entry point
+- `data/` → default directory for CSV data files
+- `output/` → directory for generated charts
+- `logs/` → generated application logs (ignored by Git)
+- `tests/` → Pytest automated test suite
 
 ## CSV Format
 The expected CSV format contains the following columns:
@@ -110,3 +115,11 @@ Optionally, for more detail:
 ```bash
 pytest -v
 ```
+
+## Logging
+
+The project uses Python's built-in `logging` module to track application events and errors without replacing normal user-facing CLI output.
+
+- Logs are written to `logs/app.log`.
+- The `logs/` directory is ignored by Git.
+- INFO, WARNING, and ERROR levels are used for recording important application events.
